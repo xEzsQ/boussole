@@ -345,21 +345,32 @@ function copySql() {
 // ══════════════════════════════════════════
 // PRODUITS
 // ══════════════════════════════════════════
+// Remplacez votre fonction loadProducts actuelle par celle-ci :
 async function loadProducts() {
-  const { data, error } = await supa.from('products').select('*').order('id');
+  const MAX_PRODUITS = 6; // Changez ce chiffre par le nombre maximum souhaité
+
+  const { data, error } = await supa
+    .from('products')
+    .select('*')
+    .order('id')
+    .limit(MAX_PRODUITS); // <--- C'est cette ligne qui limite le résultat
+
   if (error) {
     console.warn('products:', error.message);
     document.getElementById('setup-banner').classList.add('visible');
-    PRODS = DEFAULT_PRODS;
+    // Suppression de DEFAULT_PRODS qui causait une erreur si non défini
+    PRODS = []; 
     renderProducts();
     return;
   }
-  if (!data.length) {
+  
+  if (!data || !data.length) {
     document.getElementById('setup-banner').classList.add('visible');
-    PRODS = DEFAULT_PRODS;
+    PRODS = [];
     renderProducts();
     return;
   }
+  
   PRODS = data;
   renderProducts();
 }
