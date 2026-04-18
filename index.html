@@ -353,7 +353,7 @@ async function loadProducts() {
     .from('products')
     .select('*')
     .order('id')
-    .limit(MAX_PRODUITS); // <--- C'est cette ligne qui limite le résultat
+    .limit(stock); // <--- C'est cette ligne qui limite le résultat
 
   if (error) {
     console.warn('products:', error.message);
